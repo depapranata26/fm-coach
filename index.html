@@ -43,7 +43,7 @@ nav button .ic{font-size:20px}nav button.on{color:var(--acc);font-weight:700}
 <div id="app"></div>
 <nav id="nav"></nav>
 <script>
-const TABS=[["tak","🎯","Taktik"],["wk","⭐","Wonderkid"],["tr","🛒","Transfer"],["lat","📈","Latihan"]];
+const TABS=[["tak","🎯","Taktik"],["wk","⭐","Wonderkid"],["tr","🛒","Transfer"],["lat","📈","Latihan"],["kar","💼","Karier"]];
 let cur="tak";
 const WK=[
 {n:"Lamine Yamal",p:"ATT",pos:"Inside Forward",tier:"Marquee",price:"€€€",key:"Dribbling, Agility, Technique",note:"Winger elit generasional. Harga selangit tapi langsung jadi bintang."},
@@ -129,10 +129,17 @@ function renderLat(){return `<div class="card"><h2>📈 Panduan Latihan & Develo
 <h3>❌ Yang Bikin Mandek</h3><ul><li>Didiamkan di bangku cadangan / tim U21 tanpa menit</li><li>Training fokus gonta-ganti tiap minggu</li><li>Personality buruk (Low Determination) tidak ditangani</li></ul>
 <h3>📝 Rencana 3 Musim</h3><ul><li><b>Musim 1:</b> rotasi + cup, bangun personality via mentoring</li><li><b>Musim 2:</b> starter bergantian / pinjaman ke klub yang main</li><li><b>Musim 3:</b> starter tetap — jual dengan profit atau jadi legenda klub</li></ul></div>
 <div class="warnbox">⚠️ Database wonderkid dari riset komunitas (bukan data resmi SI). Harga & performa bisa beda di tiap save karena dynamic potential. Jangan jadikan patokan harga mati.</div>`}
+/* ---- Karier ---- */
+function renderKar(){return `<div class="card"><h2>💼 Mode Pengangguran → Legenda</h2><p class="mut">Panduan karier dari nol: tanpa klub, tanpa reputasi, sampai jadi manajer top.</p></div>
+<div class="card"><h2>🔍 Cara Dapat Kerja Pertama</h2><ul><li>Lamar ke klub yang <b>manajernya di ujung tanduk</b> (cek job security rendah di berita)</li><li><b>Pertengahan musim</b> paling gampang — klub panik cari pengganti</li><li>Klub <b>zona degradasi / papan bawah</b> hampir selalu terima lamaran</li><li>Jangan pilih-pilih di awal — terima yang ada, reputasi dibangun dari hasil</li><li>Naikkan <b>ekspektasi gaji rendah</b> biar dilirik klub kecil</li></ul></div>
+<div class="card"><h2>📊 Sistem Reputasi</h2><ul><li><b>Naik</b> kalau finish <b>di atas ekspektasi board</b> (misal target papan tengah, lo bawa playoff)</li><li><b>Turun/stagnan</b> kalau cuma pas ekspektasi atau dipecat</li><li>Trofi kecil (cup lokal) = boost reputasi lumayan</li><li>Reputasi tinggi → klub besar mau wawancara lo</li></ul></div>
+<div class="card"><h2>💰 Survival Klub Kecil</h2><ul><li><b>Free agent</b> adalah sahabat — cek tiap awal musim</li><li><b>Pinjaman</b> dari klub besar untuk isi skuad (lihat tab 🛒)</li><li>Wonderkid tier <b>Budget</b> di tab ⭐ — murah, mau gabung klub kecil</li><li>Jual pemain bintang yang tidak krusial → dananya buat 3-4 pemain bagus</li><li>Gaji: jangan jebol struktur gaji demi satu pemain</li></ul></div>
+<div class="card"><h2>🗺️ Roadmap Karier</h2><ul><li><b>Musim 1-2:</b> klub kecil — target: selamatkan dari degradasi / promosi = reputasi naik</li><li><b>Musim 3-4:</b> klub menengah — target: Eropa / trofi domestik</li><li><b>Musim 5+:</b> klub top — target: gelar liga & Champions</li><li>Pindah <b>di akhir musim</b> setelah prestasi — nilai jual lo tertinggi</li></ul></div>
+<div class="warnbox">⚠️ <b>Jangan sampai dipecat!</b> Selalu cek ekspektasi board tiap awal musim. Kalau target "bertahan di liga", jangan ngoyo janji juara — penuhi minimal dulu, bonus kalau overachieve.</div>`}
 /* ---- render ---- */
 function render(){
  const a=document.getElementById("app");
- a.innerHTML=cur==="tak"?renderTak():cur==="wk"?renderWk():cur==="tr"?renderTr():renderLat();
+ a.innerHTML=cur==="tak"?renderTak():cur==="wk"?renderWk():cur==="tr"?renderTr():cur==="kar"?renderKar():renderLat();
  if(cur==="wk")renderWk2();
  document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===cur));
  window.scrollTo(0,0);
