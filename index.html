@@ -39,7 +39,7 @@ nav button .ic{font-size:20px}nav button.on{color:var(--acc);font-weight:700}
 </style>
 </head>
 <body>
-<header><h1>⚽ FM26 <span>Mobile Coach</span></h1><p>Taktik • Wonderkid • Transfer • Latihan — by Jewel</p></header>
+<header><h1>⚽ FM26 <span>Mobile Coach</span></h1><p>Taktik • Wonderkid • Transfer • Latihan — by Jewel</p><p style="font-size:10px;color:var(--acc)">📊 Data: v26.4.2 (Juni 2026) + Database 26.2</p></header>
 <div id="app"></div>
 <nav id="nav"></nav>
 <script>
@@ -76,7 +76,9 @@ const TACTICS=[
 {name:"⚡ Gegenpress 4-2-3-1",form:"4-2-3-1",ment:"Menyerang",tempo:"Cepat",lebar:"Lebar",kre:"Ekspresif",desc:"Pressing tinggi, rebut bola di area lawan. Paling OP vs tim selevel/lebih lemah.",tips:["Butuh striker cepat & winger dribbling tinggi","Bek harus pace 13+ (high line)","Stamina skuad penting — rotasi tiap 2 laga"]},
 {name:"🔄 Serangan Balik 4-3-3",form:"4-3-3",ment:"Bertahan",tempo:"Cepat",lebar:"Lebar",kre:"Seimbang",desc:"Bertahan rapat, serang balik kilat. Senjata vs tim lebih kuat.",tips:["Winger pace + striker cepat wajib","Gelandang DLP untuk umpan pertama","Jangan pressing tinggi kalau kalah kualitas"]},
 {name:"🎯 Possession 4-3-3",form:"4-3-3",ment:"Kontrol",tempo:"Normal",lebar:"Seimbang",kre:"Seimbang",desc:"Kuasai bola, bangun serangan sabar. Butuh teknisi (passing 15+).",tips:["Playmaker sebagai poros","Sabar — gol datang dari kombinasi","Hindari vs tim pressing brutal"]},
-{name:"🚌 Parkir Bus 5-3-2",form:"5-3-2",ment:"Berisi",tempo:"Lambat",lebar:"Sempit",kre:"Disiplin",desc:"Mode bertahan total. Untuk underdog vs raksasa.",tips:["2 striker cepat untuk counter","Disiplin posisi > kreativitas","Target realistis: seri / menang tipis"]}
+{name:"🚌 Parkir Bus 5-3-2",form:"5-3-2",ment:"Berisi",tempo:"Lambat",lebar:"Sempit",kre:"Disiplin",desc:"Mode bertahan total. Untuk underdog vs raksasa.",tips:["2 striker cepat untuk counter","Disiplin posisi > kreativitas","Target realistis: seri / menang tipis"]},
+{name:"🔥 Meta 3-1-4-2",form:"3-1-4-2",ment:"Menyerang",tempo:"Cepat",lebar:"Lebar",kre:"Ekspresif",desc:"Taktik viral komunitas 2026: 250+ gol/musim. Diuji Millwall (juara liga) & Newcastle (FA Cup). Poros: Roaming Playmaker di tengah, winger + 2 striker.",tips:["Butuh 2 wing-back kuat naik-turun","Gelandang tengah tipe Roaming Playmaker","Mentalitas sesuaikan via Match Advisor di atas"]},
+{name:"🔴 Control & Press 3-4-3",form:"3-4-3",ment:"Kontrol",tempo:"Normal",lebar:"Sempit",kre:"Ekspresif",desc:"Racikan komunitas FMM Vibe (Man Utd): kuasai bola + pressing tinggi. Lebar dari wing-back.",tips:["3 bek: 1 Ball-Playing + 2 pelapis cepat","2 Box-to-Box jaga tengah","2 Inside Forward + 1 Pressing Forward di depan"]}
 ];
 /* ---- Taktik Advisor ---- */
 let diff=3, ha="home";
@@ -138,6 +140,7 @@ function renderKar(){return `<div class="card"><h2>💼 Mode Pengangguran → Le
 <div class="card"><h2>📊 Sistem Reputasi</h2><ul><li><b>Naik</b> kalau finish <b>di atas ekspektasi board</b> (misal target papan tengah, lo bawa playoff)</li><li><b>Turun/stagnan</b> kalau cuma pas ekspektasi atau dipecat</li><li>Trofi kecil (cup lokal) = boost reputasi lumayan</li><li>Reputasi tinggi → klub besar mau wawancara lo</li></ul></div>
 <div class="card"><h2>💰 Survival Klub Kecil</h2><ul><li><b>Free agent</b> adalah sahabat — cek tiap awal musim</li><li><b>Pinjaman</b> dari klub besar untuk isi skuad (lihat tab 🛒)</li><li>Wonderkid tier <b>Budget</b> di tab ⭐ — murah, mau gabung klub kecil</li><li>Jual pemain bintang yang tidak krusial → dananya buat 3-4 pemain bagus</li><li>Gaji: jangan jebol struktur gaji demi satu pemain</li></ul></div>
 <div class="card"><h2>🗺️ Roadmap Karier</h2><ul><li><b>Musim 1-2:</b> klub kecil — target: selamatkan dari degradasi / promosi = reputasi naik</li><li><b>Musim 3-4:</b> klub menengah — target: Eropa / trofi domestik</li><li><b>Musim 5+:</b> klub top — target: gelar liga & Champions</li><li>Pindah <b>di akhir musim</b> setelah prestasi — nilai jual lo tertinggi</li></ul></div>
+<div class="card"><h2>🌍 International Management</h2><p><b>Kembali sebagai update gratis!</b> Sekarang bisa melatih timnas bareng klub — cocok buat nambah reputasi cepat di mode pengangguran.</p><ul><li>Terima tawaran timnas kecil dulu (paling gampang dapat)</li><li>Prestasi timnas (lolos kualifikasi) = boost reputasi besar</li><li>Jadwal timnas jarang bentrok dengan klub</li></ul></div>
 <div class="warnbox">⚠️ <b>Jangan sampai dipecat!</b> Selalu cek ekspektasi board tiap awal musim. Kalau target "bertahan di liga", jangan ngoyo janji juara — penuhi minimal dulu, bonus kalau overachieve.</div>`}
 /* ---- render ---- */
 function render(){
