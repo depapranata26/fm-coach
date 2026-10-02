@@ -73,10 +73,10 @@ const WK=[
 {n:"Samu Omorodion",p:"ATT",pos:"Striker",tier:"Budget",price:"€",key:"Pace, Strength",note:"Alternatif murah Šeško, cepat + kuat."}
 ];
 const TACTICS=[
-{name:"⚡ Gegenpress 4-2-3-1",form:"4-2-3-1",ment:"Attacking",tempo:"Fast",desc:"Pressing tinggi, rebut bola di area lawan. Paling OP vs tim selevel/lebih lemah.",tips:["Butuh striker cepat & winger dribbling tinggi","Bek harus pace 13+ (high line)","Stamina skuad penting — rotasi tiap 2 laga"]},
-{name:"🔄 Counter 4-3-3",form:"4-3-3",ment:"Counter",tempo:"Fast",desc:"Bertahan rapat, serang balik kilat. Senjata vs tim lebih kuat.",tips:["Winger pace + striker cepat wajib","Gelandang DLP untuk umpan pertama","Jangan gegenpress kalau skuad kalah kualitas"]},
-{name:"🎯 Possession 4-3-3",form:"4-3-3",ment:"Control",tempo:"Balanced",desc:"Kuasai bola, bangun serangan sabar. Butuh teknisi (passing 15+).",tips:["Playmaker (Neves/Paz/Güler) sebagai poros","Sabar — gol datang dari kombinasi","Hindari vs tim pressing brutal"]},
-{name:"🚌 Parkir Bus 5-3-2",form:"5-3-2",ment:"Counter",tempo:"Slow",desc:"Mode bertahan total. Untuk underdog vs raksasa.",tips:["2 striker cepat untuk counter","Disiplin posisi > kreativitas","Target realistis: seri / menang tipis"]}
+{name:"⚡ Gegenpress 4-2-3-1",form:"4-2-3-1",ment:"Menyerang",tempo:"Cepat",lebar:"Lebar",kre:"Ekspresif",desc:"Pressing tinggi, rebut bola di area lawan. Paling OP vs tim selevel/lebih lemah.",tips:["Butuh striker cepat & winger dribbling tinggi","Bek harus pace 13+ (high line)","Stamina skuad penting — rotasi tiap 2 laga"]},
+{name:"🔄 Serangan Balik 4-3-3",form:"4-3-3",ment:"Bertahan",tempo:"Cepat",lebar:"Lebar",kre:"Seimbang",desc:"Bertahan rapat, serang balik kilat. Senjata vs tim lebih kuat.",tips:["Winger pace + striker cepat wajib","Gelandang DLP untuk umpan pertama","Jangan pressing tinggi kalau kalah kualitas"]},
+{name:"🎯 Possession 4-3-3",form:"4-3-3",ment:"Kontrol",tempo:"Normal",lebar:"Seimbang",kre:"Seimbang",desc:"Kuasai bola, bangun serangan sabar. Butuh teknisi (passing 15+).",tips:["Playmaker sebagai poros","Sabar — gol datang dari kombinasi","Hindari vs tim pressing brutal"]},
+{name:"🚌 Parkir Bus 5-3-2",form:"5-3-2",ment:"Berisi",tempo:"Lambat",lebar:"Sempit",kre:"Disiplin",desc:"Mode bertahan total. Untuk underdog vs raksasa.",tips:["2 striker cepat untuk counter","Disiplin posisi > kreativitas","Target realistis: seri / menang tipis"]}
 ];
 /* ---- Taktik Advisor ---- */
 let diff=3, ha="home";
@@ -85,24 +85,25 @@ function renderTak(){
  <h3>Kesulitan lawan</h3><div class="chips">${[1,2,3,4,5].map(d=>`<div class="chip ${d===diff?"on":""} " onclick="diff=${d};render()"><b>${d}</b><small>${["","Gampang","Lumayan","Seimbang","Berat","Susah"][d]}</small></div>`).join("")}</div>
  <h3>Kandang / Tandang</h3><div class="chips">${["home","away"].map(x=>`<div class="chip ${x===ha?"on":""} " onclick="ha='${x}';render()">${x==="home"?"🏠 Kandang":"✈️ Tandang"}</div>`).join("")}</div></div>`;
  const adv=advise();
- h+=`<div class="result"><h3>📋 Rekomendasi</h3><p><span class="big">${adv.ment}</span> <span class="mut">mentality</span></p><p><span class="big">${adv.tempo}</span> <span class="mut">tempo</span></p><ul>${adv.tips.map(t=>`<li>${t}</li>`).join("")}</ul></div>`;
- h+=`<div class="card"><h2>📖 6 Mentality Resmi (Manual SI)</h2><ul><li><b>Overload</b> — darurat saat ketinggalan, semua ke depan, pertahanan diabaikan</li><li><b>Attacking</b> — gempur terus, kunci lawan di area mereka</li><li><b>Control</b> — kuasai bola + tetap hati-hati di belakang</li><li><b>Balanced</b> — tengah-tengah, fondasi untuk semua strategi</li><li><b>Counter</b> — bertahan dulu, serang balik cepat saat dapat bola</li><li><b>Defensive</b> — paling bertahan, untuk underdog ekstrem</li></ul><p class="mut">Sumber: manual resmi Sports Interactive FM26 Mobile.</p></div>`;
- h+=`<div class="card"><h2>📐 Taktik Plug & Play</h2><p class="mut">Preset komunitas, tinggal tiru settingnya.</p>${TACTICS.map((t,i)=>`<div class="wk"><b>${t.name}</b> <span class="tag t-pos">${t.form}</span><br><span class="mut">Mentality: ${t.ment} • Tempo: ${t.tempo}</span><p style="margin-top:6px">${t.desc}</p><ul>${t.tips.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("")}</div>`;
+ h+=`<div class="result"><h3>📋 Rekomendasi (nama persis in-game)</h3><p>🧠 Mentalitas: <span class="big">${adv.ment}</span></p><p>⏩ Tempo Operan: <b>${adv.tempo}</b> &nbsp; ↔️ Lebar: <b>${adv.lebar}</b> &nbsp; 🎨 Kreasi: <b>${adv.kre}</b></p><ul>${adv.tips.map(t=>`<li>${t}</li>`).join("")}</ul></div>`;
+ h+=`<div class="card"><h2>📖 7 Mentalitas In-Game (dari screenshot)</h2><p class="mut">Urutan dari paling bertahan → paling menyerang:</p><ul><li><b>Berisi</b> — paling bertahan (underdog ekstrem)</li><li><b>Bertahan</b> — fokus bertahan, serang balik</li><li><b>Seimbang</b> — tengah-tengah</li><li><b>Kontrol</b> — kuasai bola + hati-hati</li><li><b>Serangan</b> — gempur</li><li><b>Menyerang</b> — gempur habis-habisan</li><li><b>Overload</b> — darurat saat ketinggalan</li></ul></div>`;
+ h+=`<div class="card"><h2>📐 Taktik Plug & Play</h2><p class="mut">Preset komunitas, tinggal tiru settingnya.</p>${TACTICS.map((t,i)=>`<div class="wk"><b>${t.name}</b> <span class="tag t-pos">${t.form}</span><br><span class="mut">Mentalitas: ${t.ment} • Tempo: ${t.tempo} • Lebar: ${t.lebar} • Kreasi: ${t.kre}</span><p style="margin-top:6px">${t.desc}</p><ul>${t.tips.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("")}</div>`;
  h+=`<div class="card"><h2>⚙️ Setting Pelatih (Coaches)</h2><ul><li><b>1 Stamina</b> — jadikan asisten manajer</li><li><b>2 Attacking</b></li><li><b>1 Defending</b></li><li>Lo sendiri ambil peran <b>Stamina coach</b></li></ul><p class="mut">Formula komunitas FMM Vibe yang terbukti stabil.</p></div>`;
  h+=`<div class="card"><h2>🔄 Aturan Pergantian</h2><ul><li>Unggul <b>3 gol</b> vs tim lemah → ganti ke <b>Counter + Slow</b></li><li>Unggul <b>2 gol</b> vs tim kuat → ganti ke <b>Counter + Slow</b></li><li>Kebobolan 2 gol cepat → turunkan 1 level mentality, jangan panik ganti formasi</li></ul></div>`;
  return h;
 }
 function advise(){
- let m,t,tips=[];
- if(diff<=2){m="Attacking";t="Fast";tips.push("Dominasi dari menit awal — lawan tidak sebanding.");}
- else if(diff===3){m="Control";t="Balanced";tips.push("Kuasai bola tapi tetap waspada serangan balik (Control = possession + hati-hati).");}
- else if(diff===4){m="Balanced";t="Balanced";tips.push("Jangan terlalu terbuka — prioritaskan tidak kebobolan dulu.");}
- else{m="Counter";t="Slow";tips.push("Underdog mode: rapat, sabar, serang balik.");}
- if(ha==="away"&&diff>=3){tips.push("Tandang vs lawan berat: pertimbangkan turun 1 level mentality.");}
- if(ha==="home"&&diff<=2){tips.push("Kandang vs tim lemah: gas penuh, target menang besar.");}
- tips.push("Ketinggalan di 15 menit akhir → <b>Overload</b> (mode darurat, semua ke depan).");
- tips.push("Unggul → turunkan 1 level mentality untuk amankan hasil.");
- return{ment:m,tempo:t,tips};
+ let m,t,l,k,tips=[];
+ if(diff===1){m="Menyerang";t="Cepat";l="Lebar";k="Ekspresif";tips.push("Lawan jauh di bawah — gas penuh dari menit awal.");}
+ else if(diff===2){m="Serangan";t="Cepat";l="Lebar";k="Ekspresif";tips.push("Dominasi, kunci lawan di areanya.");}
+ else if(diff===3){m="Kontrol";t="Normal";l="Seimbang";k="Seimbang";tips.push("Kuasai bola tapi tetap hati-hati di belakang.");}
+ else if(diff===4){m="Seimbang";t="Normal";l="Seimbang";k="Seimbang";tips.push("Jangan terlalu terbuka — amankan dulu.");}
+ else{m="Bertahan";t="Lambat";l="Sempit";k="Disiplin";tips.push("Underdog: rapat, disiplin, serang balik.");}
+ if(ha==="away"&&diff>=4){tips.push("Tandang vs lawan jauh lebih kuat: pertimbangkan <b>Berisi</b>.");}
+ if(ha==="home"&&diff<=2){tips.push("Kandang vs tim lemah: target menang besar.");}
+ tips.push("Ketinggalan di 15 menit akhir → <b>Overload</b> (mode darurat).");
+ tips.push("Unggul 2-3 gol → turunkan 1-2 level mentalitas + Tempo Lambat.");
+ return{ment:m,tempo:t,lebar:l,kre:k,tips};
 }
 /* ---- Wonderkids ---- */
 let wpos="ALL",wqtier="ALL",wq="";
