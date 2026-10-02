@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<meta name="theme-color" content="#0a120d">
+<title>FM26 Mobile Coach</title>
+<link rel="manifest" href="manifest.json">
+<style>
+:root{--bg:#0a120d;--card:#101b13;--line:#1e3325;--acc:#7CFC00;--acc2:#ffd23f;--txt:#e8f5e9;--mut:#8fae94;--red:#ff6b6b}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{background:var(--bg);color:var(--txt);font-family:-apple-system,system-ui,"Segoe UI",Roboto,sans-serif;padding-bottom:76px;font-size:14px;line-height:1.5}
+header{position:sticky;top:0;z-index:10;background:#0a120d;border-bottom:1px solid var(--line);padding:12px 14px}
+header h1{font-size:17px}header h1 span{color:var(--acc)}
+header p{font-size:11px;color:var(--mut)}
+#app{padding:12px;max-width:640px;margin:0 auto}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.card h2{font-size:15px;margin-bottom:8px}.card h3{font-size:13px;margin:10px 0 6px;color:var(--acc2)}
+.card p{margin-bottom:8px}.card ul{margin:6px 0 6px 18px}.card li{margin-bottom:5px}
+.mut{color:var(--mut);font-size:12px}
+.tag{display:inline-block;font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;margin:2px 4px 2px 0}
+.t-Marquee{background:#ffd23f;color:#111}.t-Mid{background:#4da3ff;color:#06121f}.t-Budget{background:#7CFC00;color:#0a120d}
+.t-pos{background:#1e3325;color:var(--acc)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin:8px 0}
+.chip{flex:1;min-width:60px;text-align:center;background:#16241a;border:1px solid var(--line);border-radius:10px;padding:10px 6px;font-size:13px;cursor:pointer;color:var(--txt)}
+.chip.on{background:var(--acc);color:#0a120d;font-weight:700;border-color:var(--acc)}
+.chip small{display:block;font-size:10px;color:inherit;opacity:.7}
+button.fbtn{background:var(--acc);color:#0a120d;border:none;border-radius:10px;padding:12px;width:100%;font-weight:700;font-size:14px;cursor:pointer;margin-top:8px}
+input[type=text]{width:100%;background:#16241a;border:1px solid var(--line);border-radius:10px;color:var(--txt);padding:10px;font-size:14px;margin:6px 0}
+.result{background:#0d1a10;border:1px solid var(--acc);border-radius:12px;padding:14px;margin:10px 0}
+.result h3{color:var(--acc);margin-bottom:6px}
+.big{font-size:20px;font-weight:800}
+nav{position:fixed;bottom:0;left:0;right:0;background:#0a120d;border-top:1px solid var(--line);display:flex;z-index:20;padding-bottom:env(safe-area-inset-bottom)}
+nav button{flex:1;background:none;border:none;color:var(--mut);font-size:10px;padding:10px 2px 8px;cursor:pointer;display:flex;flex-direction:column;align-items:center;gap:2px}
+nav button .ic{font-size:20px}nav button.on{color:var(--acc);font-weight:700}
+.wk{border-left:3px solid var(--acc);padding:8px 10px;margin:8px 0;background:#0d1a10;border-radius:0 8px 8px 0}
+.wk b{font-size:14px}.wk .mut{font-size:11px}
+.warnbox{background:#2a1a0d;border:1px solid #a86b1c;border-radius:10px;padding:10px;margin:8px 0;font-size:13px}
+</style>
+</head>
+<body>
+<header><h1>⚽ FM26 <span>Mobile Coach</span></h1><p>Taktik • Wonderkid • Transfer • Latihan — by Jewel</p></header>
+<div id="app"></div>
+<nav id="nav"></nav>
+<script>
+const TABS=[["tak","🎯","Taktik"],["wk","⭐","Wonderkid"],["tr","🛒","Transfer"],["lat","📈","Latihan"]];
+let cur="tak";
+const WK=[
+{n:"Lamine Yamal",p:"ATT",pos:"Inside Forward",tier:"Marquee",price:"€€€",key:"Dribbling, Agility, Technique",note:"Winger elit generasional. Harga selangit tapi langsung jadi bintang."},
+{n:"Endrick",p:"ATT",pos:"Centre Forward",tier:"Marquee",price:"€€€",key:"Finishing, Pace, Off the Ball",note:"Finisher komplet, cocok semua sistem serangan."},
+{n:"Estêvão",p:"ATT",pos:"Winger",tier:"Marquee",price:"€€€",key:"Dribbling, Flair, Pace",note:"Winger Brasil eksplosif untuk sisi kanan/kiri."},
+{n:"Warren Zaïre-Emery",p:"MID",pos:"Box-to-Box",tier:"Marquee",price:"€€€",key:"Stamina, Tackling, Work Rate",note:"Mesin lini tengah, bisa main di semua peran gelandang."},
+{n:"João Neves",p:"MID",pos:"DLP / CM",tier:"Marquee",price:"€€€",key:"Passing, Vision, Composure",note:"Playmaker modern, otak permainan."},
+{n:"Pau Cubarsí",p:"DEF",pos:"Ball-Playing CB",tier:"Marquee",price:"€€€",key:"Positioning, Passing, Composure",note:"Bek playmaker langka, fondasi build-up."},
+{n:"Arda Güler",p:"MID",pos:"Advanced Playmaker",tier:"Marquee",price:"€€€",key:"Vision, Technique, Free Kick",note:"Kreator utama, bola mati mematikan."},
+{n:"Benjamin Šeško",p:"ATT",pos:"Target Forward",tier:"Mid",price:"~€40m+",key:"Jumping Reach 17, Heading, Strength",note:"Target man 195cm, duel udara dominan."},
+{n:"Adam Wharton",p:"MID",pos:"DLP",tier:"Mid",price:"~€30-40m",key:"Passing, Vision, Decisions",note:"Deep-lying playmaker value terbaik."},
+{n:"Ayyoub Bouaddi",p:"MID",pos:"CM",tier:"Mid",price:"~€25-40m",key:"Technique, Work Rate",note:"Gelandang komplet harga rasional."},
+{n:"Guillaume Restes",p:"GK",pos:"Sweeper Keeper",tier:"Mid",price:"~€25-35m",key:"Reflexes, Distribution",note:"Kiper sweeper terbaik untuk high line."},
+{n:"Evan Ferguson",p:"ATT",pos:"Centre Forward",tier:"Mid",price:"~€30-40m",key:"Finishing, Heading, Strength",note:"Striker link-play, alternatif Šeško lebih murah."},
+{n:"Jorrel Hato",p:"DEF",pos:"CB / LB",tier:"Mid",price:"~€30-40m",key:"Anticipation, Passing, Pace",note:"Bek kiri-kanan fleksibel, murah untuk potensinya."},
+{n:"Lucas Chevalier",p:"GK",pos:"Goalkeeper",tier:"Mid",price:"~€€",key:"Reflexes, Agility",note:"Shot-stopper murni terbaik di kelasnya."},
+{n:"Patrick Dorgu",p:"DEF",pos:"Wing-Back",tier:"Mid",price:"~€€",key:"Pace, Stamina, Crossing",note:"Wing-back modern sisi kiri."},
+{n:"Nico Paz",p:"MID",pos:"Advanced Playmaker",tier:"Mid",price:"~€€",key:"Passing 16, Vision 17",note:"Teknisi elit untuk tiki-taka."},
+{n:"Vitor Roque",p:"ATT",pos:"Striker",tier:"Mid",price:"~€€",key:"Pace, Finishing, Aggression",note:"Cepat + agresif, cocok counter-attack."},
+{n:"Hector Fort",p:"DEF",pos:"Full-Back",tier:"Budget",price:"€",key:"Stamina, Work Rate",note:"Bek sayap murah meriah, berkembang cepat."},
+{n:"Assane Diao",p:"ATT",pos:"Winger / ST",tier:"Budget",price:"€",key:"Pace, Dribbling",note:"Senjata counter murah, bisa dilatih jadi striker."},
+{n:"Roony Bardghji",p:"ATT",pos:"Winger",tier:"Budget",price:"€",key:"Crossing 15+, Pace",note:"Winger tradisional untuk taktik sayap."},
+{n:"Lucas Bergvall",p:"MID",pos:"CM",tier:"Budget",price:"€",key:"Decisions, Work Rate",note:"Underpriced, langsung bisa rotasi."},
+{n:"Arthur Vermeeren",p:"MID",pos:"DM / CM",tier:"Budget",price:"€",key:"Decisions, Work Rate",note:"Jangkar cerdas harga miring."},
+{n:"Ousmane Diomande",p:"DEF",pos:"CB",tier:"Budget",price:"€",key:"Anticipation, Strength",note:"Bek fisik murah dari Sporting."},
+{n:"Konstantinos Karetsas",p:"ATT",pos:"Winger",tier:"Budget",price:"€",key:"Crossing, Dribbling",note:"Winger muda untuk 4-4-2 wing play."},
+{n:"Samu Omorodion",p:"ATT",pos:"Striker",tier:"Budget",price:"€",key:"Pace, Strength",note:"Alternatif murah Šeško, cepat + kuat."}
+];
+const TACTICS=[
+{name:"⚡ Gegenpress 4-2-3-1",form:"4-2-3-1",ment:"Attacking",tempo:"Fast",desc:"Pressing tinggi, rebut bola di area lawan. Paling OP vs tim selevel/lebih lemah.",tips:["Butuh striker cepat & winger dribbling tinggi","Bek harus pace 13+ (high line)","Stamina skuad penting — rotasi tiap 2 laga"]},
+{name:"🔄 Counter 4-3-3",form:"4-3-3",ment:"Counter",tempo:"Fast",desc:"Bertahan rapat, serang balik kilat. Senjata vs tim lebih kuat.",tips:["Winger pace + striker cepat wajib","Gelandang DLP untuk umpan pertama","Jangan gegenpress kalau skuad kalah kualitas"]},
+{name:"🎯 Possession 4-3-3",form:"4-3-3",ment:"Control",tempo:"Balanced",desc:"Kuasai bola, bangun serangan sabar. Butuh teknisi (passing 15+).",tips:["Playmaker (Neves/Paz/Güler) sebagai poros","Sabar — gol datang dari kombinasi","Hindari vs tim pressing brutal"]},
+{name:"🚌 Parkir Bus 5-3-2",form:"5-3-2",ment:"Counter",tempo:"Slow",desc:"Mode bertahan total. Untuk underdog vs raksasa.",tips:["2 striker cepat untuk counter","Disiplin posisi > kreativitas","Target realistis: seri / menang tipis"]}
+];
+/* ---- Taktik Advisor ---- */
+let diff=3, ha="home";
+function renderTak(){
+ let h=`<div class="card"><h2>🎯 Match Advisor</h2><p class="mut">Pilih tingkat kesulitan lawan (1=gampang, 5=susah mati) — terinspirasi taktik komunitas FMM Vibe.</p>
+ <h3>Kesulitan lawan</h3><div class="chips">${[1,2,3,4,5].map(d=>`<div class="chip ${d===diff?"on":""} " onclick="diff=${d};render()"><b>${d}</b><small>${["","Gampang","Lumayan","Seimbang","Berat","Susah"][d]}</small></div>`).join("")}</div>
+ <h3>Kandang / Tandang</h3><div class="chips">${["home","away"].map(x=>`<div class="chip ${x===ha?"on":""} " onclick="ha='${x}';render()">${x==="home"?"🏠 Kandang":"✈️ Tandang"}</div>`).join("")}</div></div>`;
+ const adv=advise();
+ h+=`<div class="result"><h3>📋 Rekomendasi</h3><p><span class="big">${adv.ment}</span> <span class="mut">mentality</span></p><p><span class="big">${adv.tempo}</span> <span class="mut">tempo</span></p><ul>${adv.tips.map(t=>`<li>${t}</li>`).join("")}</ul></div>`;
+ h+=`<div class="card"><h2>📐 Taktik Plug & Play</h2><p class="mut">Preset komunitas, tinggal tiru settingnya.</p>${TACTICS.map((t,i)=>`<div class="wk"><b>${t.name}</b> <span class="tag t-pos">${t.form}</span><br><span class="mut">Mentality: ${t.ment} • Tempo: ${t.tempo}</span><p style="margin-top:6px">${t.desc}</p><ul>${t.tips.map(x=>`<li>${x}</li>`).join("")}</ul></div>`).join("")}</div>`;
+ h+=`<div class="card"><h2>⚙️ Setting Pelatih (Coaches)</h2><ul><li><b>1 Stamina</b> — jadikan asisten manajer</li><li><b>2 Attacking</b></li><li><b>1 Defending</b></li><li>Lo sendiri ambil peran <b>Stamina coach</b></li></ul><p class="mut">Formula komunitas FMM Vibe yang terbukti stabil.</p></div>`;
+ h+=`<div class="card"><h2>🔄 Aturan Pergantian</h2><ul><li>Unggul <b>3 gol</b> vs tim lemah → ganti ke <b>Counter + Slow</b></li><li>Unggul <b>2 gol</b> vs tim kuat → ganti ke <b>Counter + Slow</b></li><li>Kebobolan 2 gol cepat → turunkan 1 level mentality, jangan panik ganti formasi</li></ul></div>`;
+ return h;
+}
+function advise(){
+ let m,t,tips=[];
+ if(diff<=2){m="Attacking";t="Fast";tips.push("Dominasi dari menit awal — lawan tidak sebanding.");}
+ else if(diff===3){m="Control";t="Balanced";tips.push("Seimbang: kuasai bola tapi tetap waspada serangan balik.");}
+ else if(diff===4){m="Balanced";t="Balanced";tips.push("Jangan terlalu terbuka — prioritaskan tidak kebobolan dulu.");}
+ else{m="Counter";t="Slow";tips.push("Underdog mode: rapat, sabar, serang balik.");}
+ if(ha==="away"&&diff>=3){tips.push("Tandang vs lawan berat: pertimbangkan turun 1 level mentality.");}
+ if(ha==="home"&&diff<=2){tips.push("Kandang vs tim lemah: gas penuh, target menang besar.");}
+ tips.push("Sesuaikan lagi 15 menit terakhir sesuai skor.");
+ return{ment:m,tempo:t,tips};
+}
+/* ---- Wonderkids ---- */
+let wpos="ALL",wqtier="ALL",wq="";
+function renderWk(){
+ const pos=["ALL","GK","DEF","MID","ATT"];
+ let h=`<div class="card"><h2>⭐ Database Wonderkid</h2><p class="mut">${WK.length} pemain dari riset komunitas (harga estimasi, bisa beda di save lo).</p>
+ <input type="text" id="wq" placeholder="🔍 Cari nama..." value="${wq}" oninput="wq=this.value;renderWk2()">
+ <h3>Posisi</h3><div class="chips">${pos.map(p=>`<div class="chip ${p===wpos?"on":""}" onclick="wpos='${p}';render()">${p==="ALL"?"Semua":p}</div>`).join("")}</div>
+ <h3>Tier Harga</h3><div class="chips">${["ALL","Marquee","Mid","Budget"].map(t=>`<div class="chip ${t===wqtier?"on":""}" onclick="wqtier='${t}';render()">${t==="ALL"?"Semua":t}</div>`).join("")}</div></div><div id="wklist"></div>`;
+ return h;
+}
+function renderWk2(){
+ const list=WK.filter(w=>(wpos==="ALL"||w.p===wpos)&&(wqtier==="ALL"||w.tier===wqtier)&&w.n.toLowerCase().includes(wq.toLowerCase()));
+ document.getElementById("wklist").innerHTML=list.length?list.map(w=>`<div class="wk"><b>${w.n}</b> <span class="tag t-pos">${w.pos}</span><span class="tag t-${w.tier}">${w.tier}</span><br><span class="mut">Harga: ${w.price} • Kunci: ${w.key}</span><p style="margin-top:4px">${w.note}</p></div>`).join(""):`<div class="card"><p class="mut">Tidak ketemu. Coba kata kunci lain.</p></div>`;
+ const inp=document.getElementById("wq");inp.focus();inp.setSelectionRange(inp.value.length,inp.value.length);
+}
+/* ---- Transfer ---- */
+function renderTr(){return `<div class="card"><h2>🛒 Panduan Transfer</h2>
+<h3>🔍 Filter TransferRoom (cara komunitas)</h3><ul><li>Umur: <b>15–21</b></li><li>Tipe: <b>Transfer</b></li><li>Playing time: <b>Future Prospect</b> — filter ini membuang pemain muda yang minta jadi starter</li></ul>
+<h3>💰 Berburu Bargain</h3><ul><li><b>Kiper</b> paling lambat naik harganya — curi kiper muda bagus murah</li><li><b>Bek sayap & bek playmaker</b> berkembang lebih cepat dari kenaikan harganya</li><li>Scout <b>Amerika Selatan & Eropa Timur</b> untuk permata murah</li><li>Striker jarang benar-benar murah — lirik <b>winger/AM</b> dengan off-the-ball bagus lalu latih jadi striker</li></ul>
+<h3>⚠️ Kesalahan Umum</h3><ul><li><b>Numpuk wonderkid</b> tanpa menit main — mereka berhenti berkembang! Pinjamkan atau rotasi</li><li>Beli "prospek" umur 23+ dengan harga mahal — itu bukan wonderkid lagi</li><li>Abaikan <b>personality</b> — pemain 3,5★ yang Profesional berkembang lebih cepat dari 4,5★ yang malas</li><li>Kontrak pendek — langsung ikat <b>5 tahun + opsi perpanjangan</b></li></ul></div>
+<div class="card"><h2>📊 Atribut Kunci per Posisi (FM26)</h2><ul><li><b>GK:</b> Reflexes 14+, Agility 14+</li><li><b>CB:</b> Positioning 14+, Anticipation 14+ (lebih penting dari fisik!)</li><li><b>FB/WB:</b> Stamina 15+, Work Rate 14+, Acceleration 14+</li><li><b>Playmaker:</b> Passing 15+, Vision 14+, Composure 13+</li><li><b>Winger:</b> Dribbling 15+ (lebih penting dari Pace!), Agility 14+</li><li><b>Striker:</b> Finishing, Off the Ball, Composure</li></ul><p class="mut">Riset komunitas: di FM26, Dribbling 16 + Pace 12 mengalahkan Pace 16 + Dribbling 12.</p></div>`}
+/* ---- Latihan ---- */
+function renderLat(){return `<div class="card"><h2>📈 Panduan Latihan & Development</h2>
+<h3>✅ Yang Bikin Wonderkid Melejit</h3><ul><li><b>Menit main reguler</b> — faktor #1. Rotasi di cup + liga vs tim lemah</li><li><b>Pinjaman tepat</b> — klub yang menjanjikan menit main, bukan cuma nama besar</li><li><b>Tailored training</b> (fitur baru FM26 Mobile) — boost performa pemain kunci jelang matchday</li><li><b>Mentoring</b> — sandingkan dengan senior berpersonality bagus</li></ul>
+<h3>❌ Yang Bikin Mandek</h3><ul><li>Didiamkan di bangku cadangan / tim U21 tanpa menit</li><li>Training fokus gonta-ganti tiap minggu</li><li>Personality buruk (Low Determination) tidak ditangani</li></ul>
+<h3>📝 Rencana 3 Musim</h3><ul><li><b>Musim 1:</b> rotasi + cup, bangun personality via mentoring</li><li><b>Musim 2:</b> starter bergantian / pinjaman ke klub yang main</li><li><b>Musim 3:</b> starter tetap — jual dengan profit atau jadi legenda klub</li></ul></div>
+<div class="warnbox">⚠️ Database wonderkid dari riset komunitas (bukan data resmi SI). Harga & performa bisa beda di tiap save karena dynamic potential. Jangan jadikan patokan harga mati.</div>`}
+/* ---- render ---- */
+function render(){
+ const a=document.getElementById("app");
+ a.innerHTML=cur==="tak"?renderTak():cur==="wk"?renderWk():cur==="tr"?renderTr():renderLat();
+ if(cur==="wk")renderWk2();
+ document.querySelectorAll("#nav button").forEach(b=>b.classList.toggle("on",b.dataset.t===cur));
+ window.scrollTo(0,0);
+}
+async function init(){
+ const n=document.getElementById("nav");
+ n.innerHTML=TABS.map(t=>`<button data-t="${t[0]}" class="${t[0]==="tak"?"on":""}"><span class="ic">${t[1]}</span>${t[2]}</button>`).join("");
+ n.querySelectorAll("button").forEach(b=>b.onclick=()=>{cur=b.dataset.t;render()});
+ render();
+ if("serviceWorker" in navigator)navigator.serviceWorker.register("sw.js").catch(()=>{});
+}
+init();
+</script>
+</body>
+</html>
